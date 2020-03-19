@@ -42,7 +42,7 @@ namespace JsonReaderDima
 
             int ID = Settings1.Default.SelectedItemId;
 
-            if (ID > -1 && viewModel.Posts.Count(s => s.Id == ID) > 0)
+            if (ID > -1 && viewModel.Posts.Count(s => s!= null && s.Id == ID) > 0)
             {
                 viewModel.SelectedPost = viewModel.Posts.First(s => s.Id == ID);
             }

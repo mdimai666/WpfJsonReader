@@ -113,7 +113,17 @@
                     </Grid>
 
                 </Border>
-                <Label Content="" Padding="0" />
+                <Label ContentStringFormat="Count: {0}" d:DataContext="{StaticResource mockData}" DataContext="{Binding Posts}">
+                    <Label.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Count: " />
+                            <TextBlock Text="{Binding SelectedIndex, ElementName=listBoxPosts1}" />
+                            <TextBlock Text=" / "/>
+                            <TextBlock Text="{Binding Count}" d:DataContext="0" Foreground="Blue"/>
+                            <TextBlock Width="20"/>
+                        </StackPanel>
+                    </Label.Content>
+                </Label>
             </StackPanel>
 
 
@@ -131,7 +141,7 @@
                 </ListView.View>
             </ListView>-->
 
-            <ListBox  Grid.Row="1"
+            <ListBox  Grid.Row="1" x:Name="listBoxPosts1"
                 d:DataContext="{StaticResource mockData}" ItemsSource="{Binding Posts}" SelectedItem="{Binding SelectedPost}"  >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
