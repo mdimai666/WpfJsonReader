@@ -18,13 +18,25 @@ namespace JsonReaderDima.ViewModels
 
         Post _post;
 
-        public Post SelectedPost { get => _post; set { _post = value; OnPropertyChanged(nameof(SelectedPost)); } }
+        public Post SelectedPost
+        {
+            get => _post; set
+            {
+                _post = value;
+                OnPropertyChanged(nameof(SelectedPost));
+                OnPropertyChanged(nameof(CurrentSelectIndexNum));
+            }
+        }
 
         ObservableCollection<Post> _posts { get; set; }
 
         public ObservableCollection<Post> Posts { get => GetAsSearch(); set { _posts = value; OnPropertyChanged(nameof(Posts)); } }
 
         string _searchText = "";
+
+
+        public int CurrentSelectIndexNum => (SelectedPost == null || _post == null) ? -1 : Posts.IndexOf(SelectedPost)+1;
+
         public string SearchText
         {
             get => _searchText; set

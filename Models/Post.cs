@@ -19,7 +19,9 @@ namespace JsonReaderDima
 
         string author;
         string text;
-        List<string> cats { get; set; }
+
+        List<string> cats;
+
 
         [JsonProperty("id")]
         public int Id
@@ -64,6 +66,13 @@ namespace JsonReaderDima
             set { row_id = value; OnPropertyChanged(); }
         }
 
+        [JsonProperty("cats")]
+        public List<string> Cats
+        {
+            get => cats;
+            set { cats = value; OnPropertyChanged(); }
+        }
+
 
 
 
@@ -75,7 +84,7 @@ namespace JsonReaderDima
         }
     }
 
-    public class MockPost: Post
+    public class MockPost : Post
     {
         public MockPost()
         {
@@ -85,6 +94,7 @@ namespace JsonReaderDima
             Author = "Макаров Дмитрий";
             Page = 2;
             Row_id = 50214;
+            Cats = new List<string> { "cat1", "mycategory", "Zero-row" };
 
 
         }
