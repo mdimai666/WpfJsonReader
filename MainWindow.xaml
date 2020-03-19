@@ -71,6 +71,8 @@
 
         <ObjectDataProvider ObjectType="{x:Type viewModels:MainWindowVM}" x:Key="mockData" d:IsDataSource="True"  />
         <ObjectDataProvider ObjectType="{x:Type local:MockPost}" x:Key="mockSel" d:IsDataSource="True"  />
+        
+
     </Window.Resources>
 
     <Grid>
@@ -141,7 +143,7 @@
                 </ListView.View>
             </ListView>-->
 
-            <ListBox  Grid.Row="1" x:Name="listBoxPosts1"
+            <ListBox  Grid.Row="1" x:Name="listBoxPosts1" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                 d:DataContext="{StaticResource mockData}" ItemsSource="{Binding Posts}" SelectedItem="{Binding SelectedPost}"  >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -153,6 +155,9 @@
                                 <Label Content="{Binding Author}" Padding="0" Background="{x:Null}" Foreground="#FF2E63D4" />
 
                             </StackPanel>
+                            <TextBlock Text="{Binding CatsAsList}" Foreground="Gray" FontSize="10"/>
+
+
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -198,6 +203,27 @@
                     <Label Content="Author"/>
                     <TextBox Text="{Binding Author}" Style="{StaticResource styleEditBox1}"/>
 
+                    
+                    <Label Content="Cats"/>
+                    <Label Content="{Binding CatsAsList}" Margin="20,0,0,0"
+                            Foreground="Blue" BorderBrush="#d0d0d0" BorderThickness="1"/>
+                    <Label Content="" Height="10"/>
+
+                    <ListBox ItemsSource="{Binding Cats}" Margin="20,0,0,0" MaxHeight="130">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="X" Width="20" BorderThickness="0" 
+                                            DataContext="{Binding .}"
+                                            Click="ButtonDetailRemove_Click" />
+                                    <Label Content="{Binding .}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    
+                    
+                    <!--TEXT-->
                     <Label Content="Text"/>
 
 

@@ -1,9 +1,12 @@
 ﻿using JsonReaderDima.ViewModels;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace JsonReaderDima
 {
@@ -20,7 +23,7 @@ namespace JsonReaderDima
         string author;
         string text;
 
-        List<string> cats;
+        ObservableCollection<string> cats = new ObservableCollection<string>();
 
 
         [JsonProperty("id")]
@@ -67,13 +70,22 @@ namespace JsonReaderDima
         }
 
         [JsonProperty("cats")]
-        public List<string> Cats
+        public ObservableCollection<string> Cats
         {
             get => cats;
-            set { cats = value; OnPropertyChanged(); }
+            set
+            {
+                cats = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CatsAsList));
+            }
         }
 
-
+        [JsonIgnore]
+        public string CatsAsList
+        {
+            get => string.Join(", ", cats);
+        }
 
 
 
@@ -81,6 +93,16 @@ namespace JsonReaderDima
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
+
+        public Post()
+        {
+            cats.CollectionChanged += OnCatsCollectionChanged;
+        }
+
+        void OnCatsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(CatsAsList));
         }
     }
 
@@ -94,7 +116,7 @@ namespace JsonReaderDima
             Author = "Макаров Дмитрий";
             Page = 2;
             Row_id = 50214;
-            Cats = new List<string> { "cat1", "mycategory", "Zero-row" };
+            Cats = new ObservableCollection<string> { "cat1", "mycategory", "Zero-row" };
 
 
         }

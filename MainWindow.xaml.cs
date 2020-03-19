@@ -151,5 +151,13 @@ namespace JsonReaderDima
                 OpenFile(filename);
             }
         }
+
+        private void ButtonDetailRemove_Click(object sender, RoutedEventArgs e)
+        {
+            string data = (sender as Button).DataContext as string;
+            Debug.WriteLine(data);
+            viewModel.SelectedPost.Cats.Remove(data);
+            viewModel.OnPropertyChanged(nameof(viewModel.Posts));
+        }
     }
 }

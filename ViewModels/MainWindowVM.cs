@@ -35,7 +35,7 @@ namespace JsonReaderDima.ViewModels
         string _searchText = "";
 
 
-        public int CurrentSelectIndexNum => (SelectedPost == null || _post == null) ? -1 : Posts.IndexOf(SelectedPost)+1;
+        public int CurrentSelectIndexNum => (SelectedPost == null || _post == null) ? -1 : Posts.IndexOf(SelectedPost) + 1;
 
         public string SearchText
         {
@@ -70,10 +70,11 @@ namespace JsonReaderDima.ViewModels
 
         public MainWindowVM()
         {
+
             Posts = new ObservableCollection<Post>(){
-                new Post(){ Id=1, Title="Title1", Text="1 "+lorem, Author="Dima" },
-                new Post(){ Id=2, Title="Big poeme", Text="2 "+lorem, Author="Kolya" },
-                new Post(){ Id=3, Title="Enuma elish", Text="3 "+lorem,Author="vauya" },
+                new Post(){ Id=1, Title="Title1", Text="1 "+lorem, Author="Dima", Cats = new ObservableCollection<string> { "cat1", "mycategory", "Zero-row" } },
+                new Post(){ Id=2, Title="Big poeme", Text="2 "+lorem, Author="Kolya",Cats = new ObservableCollection<string> { "cat1", "mycategory", "Zero-row" } },
+                new Post(){ Id=3, Title="Enuma elish", Text="3 "+lorem,Author="vauya",Cats = new ObservableCollection<string> { "cat1", "mycategory", "Zero-row" } },
             };
 
             SelectedPost = Posts.First();
