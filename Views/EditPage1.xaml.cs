@@ -61,7 +61,7 @@ namespace JsonReaderDima.Views
             e.OnPostsUpdate -= E_OnPostsUpdate;
         }
 
-        private void UpdateFromStore()
+        public void UpdateFromStore()
         {
             e = DependencyService.GetInstance<DataStore>();
 

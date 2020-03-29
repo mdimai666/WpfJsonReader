@@ -44,6 +44,7 @@ namespace JsonReaderDima
             DependencyService.Register<Notifier>(notifier);
         }
 
-        
+
+
     }
 }

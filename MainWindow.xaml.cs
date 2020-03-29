@@ -29,17 +29,22 @@ namespace JsonReaderDima
 
         DataStore e;
 
-
         public MainWindow()
         {
             
 
             e = DependencyService.GetInstance<DataStore>();
 
-            OpenFile(Settings1.Default.LastFileName);
+            Loaded += MainWindow_Loaded;
 
             InitializeComponent();
         }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            OpenFile(Settings1.Default.LastFileName);
+        }
+
 
         public void OpenFile(string filename = "")
         {
@@ -48,6 +53,14 @@ namespace JsonReaderDima
 
             e.Posts = _e.Posts;
             e.FileName = _e.FileName;
+
+            {
+                //frame1.Content = new EditPage1();
+                //if(frame1.CanGoBack) frame1.RemoveBackEntry();
+                //var f = (frame1.Content as EditPage1);
+                var f = (frame1.Content as EditPage1);
+                f.UpdateFromStore();
+            }
 
 
             Title = $"JSON Editor (mdimai666) - {filename}";

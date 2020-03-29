@@ -71,13 +71,17 @@ namespace JsonReaderDima.ViewModels
         public MainWindowVM()
         {
 
+#if DEBUG
             Posts = new ObservableCollection<Post>(){
                 new Post(){ Id=1, Title="Title1", Text="1 "+lorem, Author="Dima", Cats = new ObservableCollection<string> { "cat1", "mycategory", "Zero-row" } },
                 new Post(){ Id=2, Title="Big poeme", Text="2 "+lorem, Author="Kolya",Cats = new ObservableCollection<string> { "cat1", "mycategory", "Zero-row" } },
                 new Post(){ Id=3, Title="Enuma elish", Text="3 "+lorem,Author="vauya",Cats = new ObservableCollection<string> { "cat1", "mycategory", "Zero-row" } },
             };
 
-            SelectedPost = Posts.First();
+            SelectedPost = Posts.First(); 
+#else
+            Posts = new ObservableCollection<Post>();
+#endif
         }
 
         public ObservableCollection<Post> GetAsSearch()

@@ -5,6 +5,8 @@ using System.IO;
 using System.Text;
 using System.Linq;
 using System.Collections.ObjectModel;
+using ToastNotifications;
+using ToastNotifications.Messages;
 
 namespace JsonReaderDima
 {
@@ -59,6 +61,7 @@ namespace JsonReaderDima
                         }
                         catch (System.Exception ex)
                         {
+                            Notify($"on OpenFile error: {ex.Message}", NitifyType.Error);
                             System.Console.WriteLine(ex.Message);
                         }
                     }
@@ -71,6 +74,9 @@ namespace JsonReaderDima
                 }
 
                 FileName = filename;
+
+                //OnPostsUpdate?.Invoke();
+                Notify($"OpenFile: {filename}", NitifyType.Success);
 
                 return posts ?? new List<Post>();
             }
@@ -132,6 +138,28 @@ namespace JsonReaderDima
             {
                 Posts[index] = selectedPost;
             }
+        }
+
+        void Notify(string message, NitifyType type = NitifyType.Information)
+        {
+            Notifier notifier = DependencyService.GetInstance<Notifier>();
+
+            if (type == NitifyType.Information)
+                notifier.ShowInformation(message);
+            else if (type == NitifyType.Success)
+                notifier.ShowSuccess(message);
+            else if (type == NitifyType.Warning)
+                notifier.ShowWarning(message);
+            else if (type == NitifyType.Error)
+                notifier.ShowError(message);
+        }
+
+        enum NitifyType
+        {
+            Success,
+            Information,
+            Warning,
+            Error
         }
     }
 }
