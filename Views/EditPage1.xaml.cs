@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -15,6 +16,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ToastNotifications;
+using ToastNotifications.Messages;
 
 namespace JsonReaderDima.Views
 {
@@ -26,6 +29,10 @@ namespace JsonReaderDima.Views
 
         public MainWindowVM viewModel;
 
+        DataStore e;
+
+
+        MainWindow main => (App.Current as App).MainWindow as MainWindow;
 
         public EditPage1()
         {
@@ -33,10 +40,33 @@ namespace JsonReaderDima.Views
 
             DataContext = viewModel = new MainWindowVM();
 
-            DataStore e = new DataStore();
-            DependencyService.Register<DataStore>(e);
+            UpdateFromStore();
 
-            OpenFile(Settings1.Default.LastFileName);
+#if DEBUG1
+            ExecutionPlan.Delay(300, () =>
+                {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        OpenCategoriesPageButton_Click(null, null);
+                    });
+
+                }); 
+#endif
+
+            e.OnPostsUpdate += E_OnPostsUpdate;
+        }
+
+        ~EditPage1()
+        {
+            e.OnPostsUpdate -= E_OnPostsUpdate;
+        }
+
+        private void UpdateFromStore()
+        {
+            e = DependencyService.GetInstance<DataStore>();
+
+            viewModel.Posts = e.Posts.ToObservableCollection();
+
 
             int ID = Settings1.Default.SelectedItemId;
 
@@ -48,41 +78,41 @@ namespace JsonReaderDima.Views
             {
                 if (e.Posts.Count > 0) viewModel.SelectedPost = viewModel.Posts.First();
             }
-
-            ExecutionPlan.Delay(300, () =>
-            {
-                this.Dispatcher.Invoke(() =>
-                {
-                    OpenCategoriesPageButton_Click(null, null);
-                });
-                
-            });
         }
 
         void OpenFile(string filename = "")
         {
-            DataStore e = new DataStore(filename);
-
-            DataStore de = DependencyService.GetInstance<DataStore>();
-            de.Posts = e.Posts;
-
-
-            viewModel.Posts = new ObservableCollection<Post>(e.Posts);
-
-            Title = $"JSON Editor (mdimai666) - {filename}";
+            main.OpenFile(filename);
+            
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void E_OnPostsUpdate()
+        {
+            viewModel.Posts = e.Posts.ToObservableCollection();
+        }
+
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs _e)
         {
             string search = searchBox1.Text.ToLower();
 
         }
 
-        private void OnSaveClick(object sender, RoutedEventArgs e)
+        private void OnSaveClick(object sender, RoutedEventArgs _e)
         {
+            DataStore e = DependencyService.GetInstance<DataStore>();
+
+            if (viewModel.SelectedPost != null)
+            {
+                e.UpdatePost(viewModel.SelectedPost);
+            }
 
 
+            e.SaveFile();
 
+
+            Notifier notifier = DependencyService.GetInstance<Notifier>();
+            notifier.ShowSuccess($"saved\n {e.FileName} ");
         }
         
 
@@ -125,6 +155,21 @@ namespace JsonReaderDima.Views
         private void OpenCategoriesPageButton_Click(object sender, RoutedEventArgs e)
         {
             ((App.Current as App).MainWindow as MainWindow).frame1.Navigate(new CategoryEdit1());
+        }
+
+        private void ButtonListItemRemove_Click(object sender, RoutedEventArgs _e)
+        {
+            Post item = (sender as Button).DataContext as Post;
+
+            //viewModel.Posts = viewModel.Posts.Where(s => s.Id != item.Id).ToObservableCollection();
+
+            e.RemovePost(item.Id);
+        }
+
+        private void OpenFolderButton_Click(object sender, RoutedEventArgs _e)
+        {
+            string dir = System.IO.Path.GetDirectoryName(e.FileName);
+            Process.Start("explorer.exe", dir);
         }
     }
 }

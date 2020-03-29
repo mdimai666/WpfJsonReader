@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace JsonReaderDima.ViewModels
+namespace JsonReaderDima
 {
     public static partial class Extensions
     {
-        public static ObservableCollection<T> AsObservableCollection<T>(this IEnumerable<T> items)
+        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> items)
         {
             return new ObservableCollection<T>(items);
         }

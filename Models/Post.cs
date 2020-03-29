@@ -12,31 +12,79 @@ namespace JsonReaderDima
 {
 #pragma warning disable CA2235 // Mark all non-serializable fields
     [Serializable]
-    public class CatItemStat : INotifyPropertyChanged
+    public class Post : INotifyPropertyChanged
     {
-        //int id;
+        int row_id;
+        int page;
+        int id;
 
         string title;
 
-        int count;
-        string value;
+        string author;
+        string text;
 
         ObservableCollection<string> cats = new ObservableCollection<string>();
 
 
-
-        [JsonProperty("value")]
-        public string Value
+        [JsonProperty("id")]
+        public int Id
         {
-            get => value;
-            set { this.value = value; OnPropertyChanged(); }
+            get => id;
+            set { id = value; OnPropertyChanged(); }
         }
 
-        [JsonProperty("count")]
-        public int Count
+        [JsonProperty("title")]
+        public string Title
         {
-            get => count;
-            set { this.count = value; OnPropertyChanged(); }
+            get => title;
+            set { title = value; OnPropertyChanged(); }
+        }
+
+        [JsonProperty("text")]
+        public string Text
+        {
+            get => text;
+            set { text = value; OnPropertyChanged(); }
+        }
+
+        [JsonProperty("author")]
+        public string Author
+        {
+            get => author;
+            set { author = value; OnPropertyChanged(); }
+        }
+
+        [JsonProperty("page")]
+        public int Page
+        {
+            get => page;
+            set { page = value; OnPropertyChanged(); }
+        }
+
+
+        [JsonProperty("row_id")]
+        public int Row_id
+        {
+            get => row_id;
+            set { row_id = value; OnPropertyChanged(); }
+        }
+
+        [JsonProperty("cats")]
+        public ObservableCollection<string> Cats
+        {
+            get => cats;
+            set
+            {
+                cats = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CatsAsList));
+            }
+        }
+
+        [JsonIgnore]
+        public string CatsAsList
+        {
+            get => string.Join(", ", cats);
         }
 
 
@@ -47,14 +95,28 @@ namespace JsonReaderDima
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
 
+        public Post()
+        {
+            cats.CollectionChanged += OnCatsCollectionChanged;
+        }
+
+        void OnCatsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(CatsAsList));
+        }
     }
 
-    public class MockCatItemStat : CatItemStat
+    public class MockPost : Post
     {
-        public MockCatItemStat()
+        public MockPost()
         {
-            Value = "Cat Title";
-            Count = 2;
+            Title = "Poem Title";
+            Id = 101;
+            Text = MainWindowVM.lorem;
+            Author = "Макаров Дмитрий";
+            Page = 2;
+            Row_id = 50214;
+            Cats = new ObservableCollection<string> { "cat1", "mycategory", "Zero-row" };
 
 
         }

@@ -98,7 +98,7 @@ namespace JsonReaderDima.ViewModels
                         || (post.Text.ToLower().Contains(search))
                         || (post.Author.ToLower().Contains(search))
                         ;
-                }).AsObservableCollection();
+                }).ToObservableCollection();
             }
         }
     }

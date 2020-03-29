@@ -91,6 +91,8 @@ namespace JsonReaderDima.ViewModels
             SelectedCat = Cats.First();
         }
 
+        
+
         public ObservableCollection<CatItemStat> GetAsSearch()
         {
             string search = _searchText.ToLower();
@@ -106,7 +108,7 @@ namespace JsonReaderDima.ViewModels
                     return
                         (post.Value.ToLower().Contains(search))
                         ;
-                }).AsObservableCollection();
+                }).ToObservableCollection();
             }
         }
 
@@ -118,6 +120,7 @@ namespace JsonReaderDima.ViewModels
             ItemIsDirty = true;
             return e;
         }
+
 
         public bool RemoveItemsLessBy(int count)
         {

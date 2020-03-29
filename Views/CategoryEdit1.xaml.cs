@@ -57,10 +57,18 @@ namespace JsonReaderDima.Views
             return list.GroupBy(s => s.Value).Select(g => new CatItemStat { Count = g.Count(), Value = g.First().Value }).OrderByDescending(s => s.Count).ToList();
         }
 
-        private void OnSaveClick(object sender, RoutedEventArgs e)
+        private void OnSaveClick(object sender, RoutedEventArgs _e)
         {
-            Notifier notifier = DependencyService.GetInstance<Notifier>();
 
+            List<string> originalList = new List<string>(GetCatItems().Select(s=>s.Value));
+
+            List<string> requireRemove = originalList.Except(viewModel.Cats.Select(s=>s.Value).ToList()).ToList();
+
+            DataStore e = DependencyService.GetInstance<DataStore>();
+            e.RemoveCats(requireRemove);
+
+
+            Notifier notifier = DependencyService.GetInstance<Notifier>();
             notifier.ShowSuccess("saved");
 
         }
@@ -75,6 +83,20 @@ namespace JsonReaderDima.Views
             if (viewModel.RemoveCat(item.Value))
             {
                 AddLog($"removed item = {item.Value} ({item.Count})");
+            }
+        }
+
+        private void ButtonListItemRemoveRelatedPosts_Click(object sender, RoutedEventArgs _e)
+        {
+            CatItemStat item = (sender as Button).DataContext as CatItemStat;
+
+            DataStore e = DependencyService.GetInstance<DataStore>();
+
+            if (e.RemoveRelatedPosts(item.Value))
+            {
+                AddLog($"removed related Posts = {item.Value} ({item.Count})");
+                viewModel.Cats = GetCatItems().ToObservableCollection();
+
             }
         }
 
@@ -96,6 +118,8 @@ namespace JsonReaderDima.Views
 
             
         }
+
+        
     }
 
 }

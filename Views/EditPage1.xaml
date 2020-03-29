@@ -25,7 +25,7 @@
         </Grid.ColumnDefinitions>
 
 
-        <Grid Grid.Column="0" Margin="5">
+        <Grid Grid.Column="0" Margin="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -36,6 +36,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Button Content="OpenFile" Style="{StaticResource BtnPrimary}" Background="Gray" Padding="15,2" Click="OpenFileButton_Click" Margin="0,0,5,0"/>
                     <Button Content="CATEGORIES" Style="{StaticResource BtnPrimary}" Background="Gray" Padding="15,2" Click="OpenCategoriesPageButton_Click" Margin="0,0,5,0"/>
+                    <Button Content="Open dir" Style="{StaticResource BtnPrimary}" Background="Gray" Padding="15,2" Click="OpenFolderButton_Click" Margin="0,0,5,0"/>
                 </StackPanel>
 
                 <Label Content="" Padding="0" />
@@ -73,21 +74,39 @@
                 </ListView>-->
 
             <ListBox  Grid.Row="1" x:Name="listBoxPosts1" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      Margin="5"
                     d:DataContext="{StaticResource mockData}" ItemsSource="{Binding Posts}" SelectedItem="{Binding SelectedPost}"  >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding Title}" FontSize="22" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Id, StringFormat='#{0}'}" Margin="0,0,5,0"  />
-                                <Label Content="{Binding Author}" Padding="0" Background="{x:Null}" Foreground="#FF2E63D4" />
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="{Binding Title}" FontSize="22" />
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Id, StringFormat='#{0}'}" Margin="0,0,5,0"  />
+                                    <Label Content="{Binding Author}" Padding="0" Background="{x:Null}" Foreground="#FF2E63D4" />
+
+                                </StackPanel>
+                                <TextBlock Text="{Binding CatsAsList}" Foreground="Gray" FontSize="10"/>
+
 
                             </StackPanel>
-                            <TextBlock Text="{Binding CatsAsList}" Foreground="Gray" FontSize="10"/>
 
+                            <StackPanel Grid.Column="1">
+                                <Button Content="X" Width="20" Height="20" HorizontalAlignment="Right"
+                                        Margin="0,0,0,3"
+                                    DataContext="{Binding .}"
+                                    Click="ButtonListItemRemove_Click"
+                                    Style="{StaticResource RoundCorner}" />
 
-                        </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                        
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -135,6 +154,7 @@
 
                     <Label Content="Cats"/>
                     <Label Content="{Binding CatsAsList}" Margin="20,0,0,0"
+                           MinHeight="25"
                                 Foreground="Blue" BorderBrush="#d0d0d0" BorderThickness="1"/>
                     <Label Content="" Height="10"/>
 
@@ -146,8 +166,10 @@
                     </StackPanel>
 
                     <!--Tag list-->
-                    <ListBox ItemsSource="{Binding Cats}" Margin="20,0,0,0" MaxHeight="110" x:Name="listBoxTagsList1">
-                        <ListBox.ItemTemplate>
+                    <ListView ItemsSource="{Binding Cats}" Margin="20,0,0,0" 
+                              MinHeight="25"
+                              MaxHeight="110" x:Name="listBoxTagsList1">
+                        <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                     <Button Content="X" Width="20" Height="20" BorderThickness="0" Style="{StaticResource RoundCorner}"
@@ -157,10 +179,10 @@
                                     <TextBlock Text="{Binding .}" Margin="7,0,0,0"/>
                                 </StackPanel>
                             </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                        </ListView.ItemTemplate>
+                    </ListView>
 
-                    <!--<ItemsControl ItemsSource="{Binding Cats}">
+                    <!--<ItemsControl ItemsSource="{Binding Cats}" Margin="20,0,0,0" MaxHeight="110" x:Name="listBoxTagsList2">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel Orientation="Horizontal"/>
@@ -168,17 +190,50 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal" 
-                                            Background="{StaticResource SecondaryColorBrush}" Margin="0,0,10,5">
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="X" Width="20" Height="20" BorderThickness="0" Style="{StaticResource RoundCorner}"
+                                                DataContext="{Binding .}"
+                                                Click="ButtonDetailRemove_Click" />
+                                    --><!--<TextBlock Text="1." Margin="5,0,5,0"/>--><!--
+                                    <TextBlock Text="{Binding .}" Margin="7,0,0,0"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>-->
+
+                    <!--new tags list-->
+                    <!--<ItemsControl ItemsSource="{Binding Cats}">
+                        <ItemsControl.Resources>
+                            <ResourceDictionary>
+                                <Style TargetType="StackPanel" x:Key="hoverStackPanel1">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Opacity" Value="1" />
+                                            <Setter Property="Background" Value="Red"/>
+                                        </Trigger> 
+                                        <Trigger Property="IsMouseOver" Value="False">
+                                            <Setter Property="Opacity" Value="0.7" />
+                                            <Setter Property="Background" Value="{StaticResource SecondaryColorBrush}"/>
+                                        </Trigger> 
+                                    </Style.Triggers>
+                                </Style>
+                            </ResourceDictionary>
+                        </ItemsControl.Resources>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Style="{StaticResource hoverStackPanel1}"
+                                             Margin="0,0,10,5">
                                     
-                                    <TextBlock Text="{Binding .}" Margin="7,0,10,0" Foreground="White" FontSize="14" />
+                                    <TextBlock Text="{Binding ., StringFormat=#{0}}" Margin="7,0,10,0" Foreground="White" FontSize="14" />
                                     <Button Content="X" Width="15" Height="15" BorderThickness="0" Style="{StaticResource RoundCorner}"
                                                 DataContext="{Binding .}"
                                                 FontSize="8" Margin="3"
                                                 Click="ButtonDetailRemove_Click" />
-                                    -->
-                    <!--<TextBlock Text="1." Margin="5,0,5,0"/>-->
-                    <!--
                                     
                                 </StackPanel>
                             </DataTemplate>

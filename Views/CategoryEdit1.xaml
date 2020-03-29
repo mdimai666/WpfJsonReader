@@ -78,15 +78,24 @@
                                     <!--<TextBlock Text="{Binding Id, StringFormat='#{0}'}" Margin="0,0,5,0"  />-->
                                     <!--<Label Content="{Binding Author}" Padding="0" Background="{x:Null}" Foreground="#FF2E63D4" />-->
 
+                                    <Button Content="Удалить связанные вопросы" BorderThickness="0"
+                                        FontSize="9" DataContext="{Binding .}" Click="ButtonListItemRemoveRelatedPosts_Click" />
+
                                 </StackPanel>
 
 
                             </StackPanel>
 
-                            <Button Content="X" Grid.Column="1" Width="20" Height="20" 
+                            <StackPanel Grid.Column="1">
+                                <Button Content="X" Width="20" Height="20" HorizontalAlignment="Right"
+                                        Margin="0,0,0,3"
                                     DataContext="{Binding .}"
                                     Click="ButtonListItemRemove_Click"
                                     Style="{StaticResource RoundCorner}" />
+
+                            </StackPanel>
+
+
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -101,19 +110,75 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0">
+            <!--<StackPanel Grid.Row="1" Margin="5">
                 <TextBlock Text="Selected" />
 
-                <Border BorderBrush="Gray" BorderThickness="1" Padding="10">
+                -->
+            <!--<Border BorderBrush="Gray" BorderThickness="1" Padding="10">
                     <StackPanel DataContext="{Binding SelectedCat}" d:DataContext="{StaticResource mockSel}">
                         <TextBlock Text="{Binding Value}" FontSize="20"/>
                         <TextBlock Text="{Binding Count, StringFormat='Count: {0}'}" Foreground="Blue"/>
                     </StackPanel>
-                </Border>
+                    
+                    -->
+            <!--list-->
+            <!--
 
-            </StackPanel>
+                    
 
-            <StackPanel Grid.Row="1" Margin="5">
+                </Border>-->
+            <!--
+
+            </StackPanel>-->
+
+            <!--<Grid Grid.Row="1" Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Cats" Grid.Row="0"/>
+
+                <ListBox Grid.Row="1"  x:Name="listBoxPosts1_sel" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        d:DataContext="{StaticResource mockData}" 
+                      ItemsSource="{Binding Cats}" SelectedItem="{Binding SelectedCat}" 
+                        VerticalAlignment="Stretch">
+
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="{Binding Value}" FontSize="20" Margin="0,0,10,0" />
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Count, StringFormat='Count: {0}'}" Margin="0,0,5,0" Foreground="Blue" />
+                                        -->
+            <!--<TextBlock Text="{Binding Id, StringFormat='#{0}'}" Margin="0,0,5,0"  />-->
+            <!--<Label Content="{Binding Author}" Padding="0" Background="{x:Null}" Foreground="#FF2E63D4" />-->
+            <!--
+
+                                    </StackPanel>
+
+
+                                </StackPanel>
+
+                                <Button Content="X" Grid.Column="1" Width="20" Height="20" 
+                                    DataContext="{Binding .}"
+                                    Click="ButtonListItemRemove_Click"
+                                    Style="{StaticResource RoundCorner}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                
+            </Grid>-->
+
+            <StackPanel Grid.Row="0" Margin="5">
                 <TextBlock Text="Logs:"/>
                 <ListView Name="listViewLogs1" ItemsSource="{Binding Logs}" 
                           d:DataContext="{StaticResource LogsMock}" 

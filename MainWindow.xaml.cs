@@ -27,16 +27,30 @@ namespace JsonReaderDima
     public partial class MainWindow : Window
     {
 
-
+        DataStore e;
 
 
         public MainWindow()
         {
+            
+
+            e = DependencyService.GetInstance<DataStore>();
+
+            OpenFile(Settings1.Default.LastFileName);
+
             InitializeComponent();
+        }
+
+        public void OpenFile(string filename = "")
+        {
+
+            DataStore _e = new DataStore(filename);
+
+            e.Posts = _e.Posts;
+            e.FileName = _e.FileName;
 
 
-
-
+            Title = $"JSON Editor (mdimai666) - {filename}";
         }
 
 

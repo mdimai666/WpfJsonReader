@@ -20,7 +20,10 @@ namespace JsonReaderDima
 
         public App()
         {
-            
+
+            DataStore e = new DataStore();
+            DependencyService.Register<DataStore>(e);
+
             /* * */
             Notifier notifier = new Notifier(cfg =>
             {
@@ -35,9 +38,12 @@ namespace JsonReaderDima
                     maximumNotificationCount: MaximumNotificationCount.FromCount(5));
 
                 cfg.Dispatcher = Application.Current.Dispatcher;
+
             });
 
             DependencyService.Register<Notifier>(notifier);
         }
+
+        
     }
 }
