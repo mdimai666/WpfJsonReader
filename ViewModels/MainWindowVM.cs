@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -39,7 +38,8 @@ namespace JsonReaderDima.ViewModels
 
         public string SearchText
         {
-            get => _searchText; set
+            get => _searchText; 
+            set
             {
                 _searchText = value;
                 OnPropertyChanged(nameof(SearchText));
@@ -100,14 +100,6 @@ namespace JsonReaderDima.ViewModels
                         ;
                 }).AsObservableCollection();
             }
-        }
-    }
-
-    public static partial class Ext
-    {
-        public static ObservableCollection<T> AsObservableCollection<T>(this IEnumerable<T> items)
-        {
-            return new ObservableCollection<T>(items);
         }
     }
 }

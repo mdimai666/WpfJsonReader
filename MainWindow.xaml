@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:JsonReaderDima"
         xmlns:viewModels="clr-namespace:JsonReaderDima.ViewModels"
         xmlns:my="clr-namespace:JsonReaderDima"
+        xmlns:views="clr-namespace:JsonReaderDima.Views"
 
         mc:Ignorable="d"
         x:Name="MainWindowRoot"
@@ -13,240 +14,28 @@
 
 
     <Window.Resources>
-        <Style TargetType="ListViewItem">
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        </Style>
 
-        <Style TargetType="TextBox" x:Key="styleEditBox1" >
-            <Setter Property="Margin" Value="20,0,0,0"/>
-            <Setter Property="FontSize" Value="22"/>
-        </Style>
-
-        <Style TargetType="Button" x:Key="BtnPrimary">
-            <Setter Property="Background" Value="#FF4582EC"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="#FF4582EC"/>
-            <!--<Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="25" Background="{TemplateBinding Background}" BorderThickness="1">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>-->
-
-        </Style>
-
-        <!--search placeholder-->
-        <Style x:Key="placeHolder" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TextBox}">
-                        <Grid>
-                            <TextBox Text="{Binding Path=Text,
-                                                RelativeSource={RelativeSource TemplatedParent}, 
-                                                Mode=TwoWay,
-                                                UpdateSourceTrigger=PropertyChanged}"
-                                 x:Name="textSource" 
-                                 Background="Transparent" 
-                                 Panel.ZIndex="2" />
-                            <TextBox Text="{TemplateBinding Tag}" Background="{TemplateBinding Background}" Panel.ZIndex="1">
-                                <TextBox.Style>
-                                    <Style TargetType="{x:Type TextBox}">
-                                        <Setter Property="Foreground" Value="Transparent"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=Text, Source={x:Reference textSource}}" Value="">
-                                                <Setter Property="Foreground" Value="LightGray"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <ObjectDataProvider ObjectType="{x:Type viewModels:MainWindowVM}" x:Key="mockData" d:IsDataSource="True"  />
-        <ObjectDataProvider ObjectType="{x:Type local:MockPost}" x:Key="mockSel" d:IsDataSource="True"  />
-        
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
 
     </Window.Resources>
-
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="2*"/>
-        </Grid.ColumnDefinitions>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <Grid Grid.Column="0" Margin="5">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <!--<Button Content="Test"/>-->
-            <StackPanel Orientation="Vertical" Grid.Row="0">
+        <!-- Visibility="{Binding CanGoBack, ElementName=frame1, Converter={StaticResource BoolToVis}}" -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Visibility="{Binding CanGoBack, ElementName=frame1, Converter={StaticResource BoolToVis}}">
+            <Button Content="← Back" Click="BackButton_Click"  Height="25" Width="100" 
+                     BorderThickness="0" >
+            </Button>
+        </StackPanel>
 
-                <StackPanel Orientation="Horizontal">
-                    <Button Content="OpenFile" Style="{StaticResource BtnPrimary}" Background="Gray" Padding="15,2" Click="OpenFileButton_Click"/>
-                </StackPanel>
-
-                <Label Content="" Padding="0" />
-
-                <Border Background="White" BorderBrush="#FF0078D7" BorderThickness="0">
-                    <Grid >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Image Source="/Images/search_icon.png" Width="40" Height="38" Grid.Column="0" />
-                        <!--<Label Content="{Binding SearchText}"/>-->
-                        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
-                                 Style="{StaticResource placeHolder}" Tag="Search text" FontSize="22" Margin="2"                          
-                             Grid.Column="1" TextChanged="TextBox_TextChanged" x:Name="searchBox1"
-                         BorderBrush="Transparent" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" />
-
-                        <Button Content="X" Grid.Column="2" Width="40" Background="Transparent" BorderThickness="0" Click="Button_clearSearch"/>
-                    </Grid>
-
-                </Border>
-                <Label ContentStringFormat="Count: {0}" >
-                    <Label.Content>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Count: " />
-                            <TextBlock Text="{Binding CurrentSelectIndexNum}" />
-                            <TextBlock Text=" / "/>
-                            <TextBlock Text="{Binding Count}" d:DataContext="0" Foreground="Blue" DataContext="{Binding Posts}"/>
-                            <TextBlock Width="20"/>
-                        </StackPanel>
-                    </Label.Content>
-                </Label>
-            </StackPanel>
-
-
-
-
-            <!--<ListView  d:DataContext="{StaticResource mockData}" ItemsSource="{Binding Posts}" >
-                <ListView.View>
-                    <GridView>
-                        <GridView.Columns>
-                            <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}" Width="20" />
-                            <GridViewColumn Header="Author" DisplayMemberBinding="{Binding Author}" Width="Auto"  />
-                            <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" Width="Auto"  />
-                        </GridView.Columns>
-                    </GridView>
-                </ListView.View>
-            </ListView>-->
-
-            <ListBox  Grid.Row="1" x:Name="listBoxPosts1" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                d:DataContext="{StaticResource mockData}" ItemsSource="{Binding Posts}" SelectedItem="{Binding SelectedPost}"  >
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding Title}" FontSize="22" />
-
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Id, StringFormat='#{0}'}" Margin="0,0,5,0"  />
-                                <Label Content="{Binding Author}" Padding="0" Background="{x:Null}" Foreground="#FF2E63D4" />
-
-                            </StackPanel>
-                            <TextBlock Text="{Binding CatsAsList}" Foreground="Gray" FontSize="10"/>
-
-
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-
-        </Grid>
-
-        <Border Grid.Column="1" Margin="10">
-
-            <Grid DataContext="{Binding SelectedPost}" d:DataContext="{StaticResource mockSel}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-
-                <StackPanel Grid.Row="0" >
-
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="ID"/>
-                        <Label Content="{Binding Id}" Foreground="Blue"/>
-
-                        <Label Content=" " Width="10"/>
-
-                        <Label Content="row"/>
-                        <Label Content="{Binding Row_id}" Foreground="Blue"/>
-
-                        <Label Content=" " Width="10"/>
-
-                        <Label Content="page"/>
-                        <Label Content="{Binding Page}" Foreground="Blue"/>
-
-                        <Label Content=" " Width="10"/>
-
-                        <Button Content="Open" Padding="10,0" Style="{StaticResource BtnPrimary}" Click="OpenButton_Click"/>
-
-                    </StackPanel>
-
-                    <Label Content="Poem Title"/>
-                    <TextBox Text="{Binding Title}" Style="{StaticResource styleEditBox1}"/>
-
-                    <Label Content="Author"/>
-                    <TextBox Text="{Binding Author}" Style="{StaticResource styleEditBox1}"/>
-
-                    
-                    <Label Content="Cats"/>
-                    <Label Content="{Binding CatsAsList}" Margin="20,0,0,0"
-                            Foreground="Blue" BorderBrush="#d0d0d0" BorderThickness="1"/>
-                    <Label Content="" Height="10"/>
-
-                    <ListBox ItemsSource="{Binding Cats}" Margin="20,0,0,0" MaxHeight="130">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <Button Content="X" Width="20" BorderThickness="0" 
-                                            DataContext="{Binding .}"
-                                            Click="ButtonDetailRemove_Click" />
-                                    <Label Content="{Binding .}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                    
-                    
-                    <!--TEXT-->
-                    <Label Content="Text"/>
-
-
-                </StackPanel>
-
-                <!--<RichTextBox Margin="20,0,0,0" Grid.Row="1">
-                    <FlowDocument PageHeight="180">
-                        <Paragraph>
-                            <Run Text="{Binding Text, Mode=TwoWay}"/>
-                        </Paragraph>
-                    </FlowDocument>
-                </RichTextBox>-->
-
-                <TextBox Text="{Binding Text}" Style="{StaticResource styleEditBox1}" Grid.Row="1" 
-                         TextWrapping="Wrap"                         
-                         FontSize="13" />
-
-                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Right">
-                    <Button Content="Save" Style="{StaticResource BtnPrimary}" Padding="20,2" Click="OnSaveClick" IsEnabled="{Binding ItemIsDirty}"/>
-                </StackPanel>
-            </Grid>
-
-        </Border>
-
+        <Frame Name="frame1" NavigationUIVisibility="Hidden" Grid.Row="1" Navigating="frame1_Navigating">
+            <Frame.Content>
+                <views:EditPage1/>
+            </Frame.Content>
+        </Frame>
     </Grid>
 </Window>

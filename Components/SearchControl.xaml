@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="JsonReaderDima.Components.SearchControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:JsonReaderDima.Components"
+             mc:Ignorable="d" 
+             x:Name="SearchControlRoot"
+             d:DesignHeight="36.561" d:DesignWidth="309.881">
+    <Grid >
+        <Border Background="White" BorderBrush="#FF0078D7" BorderThickness="0">
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Image Source="/JsonReaderDima;component/Images/search_icon.png" Width="40" Height="38" Grid.Column="0" />
+                <!--<Label Content="{Binding SearchText}"/>-->
+                <TextBox Text="{Binding Text, Mode=TwoWay, ElementName=SearchControlRoot, UpdateSourceTrigger=PropertyChanged}" 
+                                     Style="{StaticResource placeHolder}" Tag="Search text" FontSize="22" Margin="2"                          
+                                 Grid.Column="1" TextChanged="TextBox_TextChanged" x:Name="searchBox1"
+                             BorderBrush="Transparent" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" />
+
+                <Button Content="X" Grid.Column="2" Width="40" Background="Transparent" BorderThickness="0" Click="Button_clearSearch"/>
+            </Grid>
+
+        </Border>
+    </Grid>
+</UserControl>
